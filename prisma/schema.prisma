@@ -1,0 +1,25 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model logs {
+  id          Int           @id @default(autoincrement())
+  title       String?       @db.VarChar(255)
+  description String?       @db.VarChar(300)
+  amount      Float?
+  category    logs_category
+  updated_at  DateTime?     @db.Date
+  created_at  DateTime      @default(dbgenerated("(curdate())")) @db.Date
+}
+
+enum logs_category {
+  needs
+  wants
+  saving
+  donation
+}
