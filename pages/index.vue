@@ -1,11 +1,15 @@
 <template>
   <div>
-    <h1 class="text-3xl font-bold underline">Hello world!</h1>
-    <button class="p-2 px-4 bg-blue-500 text-white text-xl" @click="getAllLogs">
-      Api Call
-    </button>
+    <header class="border-b border-gray-900 w-full p-4 text-center">
+      <h1 class="text-xl">Daily Logs</h1>
+    </header>
 
-    <pre>{{ logs }}</pre>
+    <main class="px-4">
+      <div></div>
+
+      <LogsTable :logs="logs" />
+    </main>
+
   </div>
 </template>
 
