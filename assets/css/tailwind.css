@@ -2,11 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-    font-family: 'Roboto Light';
+body {
+    font-family: monospace;
     font-style: normal;
-    font-weight: 400;
-    src: local('Roboto Light'), local('RobotoLt-Regular'),
-        url("http://allfont.ru/cache/fonts/roboto-light_85c220ba059dfba8286cf7085f2f591f.woff") format('woff'),
-        url("http://allfont.ru/cache/fonts/roboto-light_85c220ba059dfba8286cf7085f2f591f.ttf") format('truetype');
+    font-weight: 500;
+}
+
+.btn {
+    @apply p-2 px-4 border-0 bg-transparent rounded;
+}
+
+.btn-primary {
+    @apply bg-blue-600 text-white;
+}
+
+.btn-secondary {
+    @apply bg-gray-600 text-white;
+}
+
+.form-input {
+    @apply bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-none;
 }
