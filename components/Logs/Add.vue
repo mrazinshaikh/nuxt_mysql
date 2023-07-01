@@ -16,30 +16,33 @@
                             <div class="text-left">
                                 <label for="title">Title</label>
                                 <input type="text" id="title" class="form-input" placeholder="Title" v-model="form.title">
-                                <span v-if="errors.title" class="text-xs text-red-600">{{ errors.title  }}</span>
+                                <span v-if="form.errors?.title" class="text-xs text-red-600">{{ form.errors.title }}</span>
                             </div>
                             <div class="text-left">
                                 <label for="amount">Amount</label>
                                 <input type="number" id="amount" class="form-input" placeholder="Amount"
                                     v-model="form.amount">
-                                <span v-if="errors.amount" class="text-xs text-red-600">{{ errors.amount  }}</span>
+                                <span v-if="form.errors?.amount" class="text-xs text-red-600">{{ form.errors.amount
+                                }}</span>
                             </div>
                             <div class="text-left">
                                 <label for="description">Description</label>
                                 <textarea class="form-input" id="description" placeholder="Description"
                                     v-model="form.description"></textarea>
-                                <span v-if="errors.description" class="text-xs text-red-600">{{ errors.description  }}</span>
+                                <span v-if="form.errors?.description" class="text-xs text-red-600">{{
+                                    form.errors.description }}</span>
                             </div>
                             <div class="text-left">
                                 <label for="category">Category</label>
                                 <select class="form-input" v-model="form.category">
-                                    <option>Select category</option>
+                                    <option value="">Select category</option>
                                     <option value="needs">Needs</option>
                                     <option value="wants">Wants</option>
                                     <option value="savings">Savings</option>
                                     <option value="donation">Donation</option>
                                 </select>
-                                <span v-if="errors.category" class="text-xs text-red-600">{{ errors.category  }}</span>
+                                <span v-if="form.errors?.category" class="text-xs text-red-600">{{ form.errors.category
+                                }}</span>
                             </div>
                         </div>
                     </div>
@@ -47,7 +50,7 @@
                     <!-- Footer -->
                     <div class="w-full border-t border-gray-700 p-3 flex justify-center gap-4">
                         <button type="submit" class="btn btn-primary w-2/5">Save</button>
-                        <button type="reset" class="btn btn-secondary w-1/5">Reset</button>
+                        <button type="reset" class="btn btn-secondary w-1/5" @click="form.reset()">Reset</button>
                     </div>
                 </form>
             </div>
@@ -57,38 +60,41 @@
 
 <script>
 import _ from 'lodash';
+import { useForm } from '~/composables/useForm';
 
 export default {
     name: 'LogsAdd',
-    setup(props) {
-        const form = ref({
+    setup(props, { emit }) {
+        const { $toast } = useNuxtApp();
+
+        const form = useForm({
             title: '',
             description: '',
             amount: '',
             category: '',
+            errors: {},
         })
 
-        const errors = ref({});
+        async function submit() {
+            if (!form.validate()) return;
 
-        function validate() {
-            return !Boolean(Object.keys(form.value).filter((key) => {
-                if(key && !form.value[key]){
-                    errors.value[key] = 'Field is required';
-                    return true;
-                }
-                return false;
-            }).length)
-        }
+            const { data, error } = await useFetch('/api/logs', {
+                method: 'POST',
+                body: form.data()
+            })
 
-        function submit() {
-            if(!validate()) return;
+            if (error.value) {
+                $toast.error(error.value.data.message, { duration: 5000 })
+                return;
+            }
 
-            console.log('%cValid','font-size:30px; color:#0f0;')
+            $toast.success(data.value.message);
+            form.reset();
+            emit('close');
         }
 
         return {
             form,
-            errors,
             submit
         }
     }
