@@ -1,11 +1,5 @@
 import { reactive } from 'vue';
 
-/**
- * TODO: rules for fields validations yet to be implemented
- * 
- * @param {*} initialValues 
- */
-
 export const useForm = (initialValues) => {
     const form = reactive({
         ...initialValues,
