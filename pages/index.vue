@@ -7,10 +7,10 @@
     <main class="px-4 mt-4">
       <div class="text-right my-4">
         <button class="btn btn-primary" @click.stop="showAddModal = true">Add new</button>
-        <LogsAdd v-show="showAddModal" @close="showAddModal = false" />
+        <LogsAdd v-show="showAddModal" @close="showAddModal = false" @refresh="getAllLogs"/>
       </div>
 
-      <LogsList :logs="logs" />
+      <LogsList :logs="logs" @deleteLog="deleteLog" />
     </main>
 
   </div>
@@ -27,8 +27,9 @@ export default {
     LogsList, LogsAdd,
   },
   async setup() {
+    const { $toast } = useNuxtApp();
     const logs = ref();
-    const showAddModal = ref(true);
+    const showAddModal = ref(false);
 
     await getAllLogs();
 
@@ -40,10 +41,26 @@ export default {
       ).data;
     }
 
+    async function deleteLog(log) {
+      if (confirm(`Are you sure to delete this log: ${log.title}`)) {
+        const { data, error } = await useFetch(`/api/logs/${log.id}`, {
+          method: 'DELETE',
+        })
+        if (error.value) {
+          $toast.error(error.value.data.message, { duration: 5000 })
+          return;
+        }
+
+        getAllLogs();
+        $toast.success(data.value.message);
+      }
+    }
+
     return {
       logs,
       getAllLogs,
       showAddModal,
+      deleteLog,
     };
   },
 };

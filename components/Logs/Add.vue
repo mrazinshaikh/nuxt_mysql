@@ -2,12 +2,12 @@
     <Transition>
         <div class="fixed inset-0 bg-black/30 ">
             <div class="rounded absolute left-1/2 top-1/2 sm:top-1/3 -translate-x-1/2 -translate-y-1/2 bg-white w-11/12 sm:w-3/5"
-                v-click-outside="() => $emit('close')">
+                v-click-outside="close">
                 <form @submit.prevent="submit">
                     <!-- Header -->
                     <div class="w-full flex justify-between border-b border-gray-700 p-3">
                         <span>Add new log</span>
-                        <button class="btn !p-0 text-base" @click="$emit('close')">X</button>
+                        <button type="button" class="btn !p-0 text-base" @click="close">X</button>
                     </div>
 
                     <!-- Main -->
@@ -20,7 +20,7 @@
                             </div>
                             <div class="text-left">
                                 <label for="amount">Amount</label>
-                                <input type="number" id="amount" class="form-input" placeholder="Amount"
+                                <input type="number" id="amount" class="form-input" min="0" placeholder="Amount"
                                     v-model="form.amount">
                                 <span v-if="form.errors?.amount" class="text-xs text-red-600">{{ form.errors.amount
                                 }}</span>
@@ -64,6 +64,7 @@ import { useForm } from '~/composables/useForm';
 
 export default {
     name: 'LogsAdd',
+    emits: ['close', 'refresh'],
     setup(props, { emit }) {
         const { $toast } = useNuxtApp();
 
@@ -90,12 +91,32 @@ export default {
 
             $toast.success(data.value.message);
             form.reset();
+            close()
+            emit('refresh')
+        }
+
+        function close() {
+            const hasData = Boolean(
+                Object.keys(form.data()).filter((key) => {
+                    if (!form[key]) {
+                        return false
+                    }
+                    return true
+                }).length
+            )
+
+            if (hasData && !confirm('Are you sure to close? All input data will be lost!!')) {
+                return;
+            }
+
+            form.reset();
             emit('close');
         }
 
         return {
             form,
-            submit
+            submit,
+            close
         }
     }
 }

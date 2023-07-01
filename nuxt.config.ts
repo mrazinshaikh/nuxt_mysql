@@ -1,7 +1,7 @@
 import { defineNuxtConfig } from 'nuxt/config'
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
-export default defineNuxtConfig({  
+export default defineNuxtConfig({
   postcss: {
     plugins: {
       tailwindcss: {},
@@ -12,6 +12,7 @@ export default defineNuxtConfig({
   modules: [
     '@nuxt/devtools',
     '@nuxtjs/tailwindcss',
+    'nuxt-icon',
   ],
 
   devtools: {

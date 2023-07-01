@@ -9,6 +9,7 @@
                     <th scope="col" class="px-6 py-3">Amount</th>
                     <th scope="col" class="px-6 py-3">Category</th>
                     <th scope="col" class="px-6 py-3">When</th>
+                    <th scope="col" class="px-6 py-3">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -20,6 +21,16 @@
                     <td scope="col" class="px-6 py-4">{{ log.amount }}</td>
                     <td scope="col" class="px-6 py-4">{{ log.category }}</td>
                     <td scope="col" class="px-6 py-4">{{ log.create_at }}</td>
+                    <td scope="col" class="px-6 py-4">
+                        <div class="flex justify-around gap-2">
+                            <button>
+                                <Icon name="material-symbols:edit-square-outline" size="1.5rem" />
+                            </button>
+                            <button class="cursor-pointer" @click="$emit('deleteLog', log)">
+                                <Icon name="ic:baseline-delete" size="1.5rem" />
+                            </button>
+                        </div>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -35,5 +46,6 @@ export default {
             default: {}
         }
     },
+    emits: ['deleteLog']
 }
 </script>
