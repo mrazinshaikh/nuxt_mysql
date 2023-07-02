@@ -12,7 +12,7 @@ export default defineNuxtConfig({
   modules: [
     '@nuxt/devtools',
     '@nuxtjs/tailwindcss',
-    'nuxt-icon',
+    'nuxt-icon', // list all icons https://icones.js.org/collection/all
   ],
 
   devtools: {

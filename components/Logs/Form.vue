@@ -6,7 +6,8 @@
                 <form @submit.prevent="submit">
                     <!-- Header -->
                     <div class="w-full flex justify-between border-b border-gray-700 p-3">
-                        <span>Add new log</span>
+                        <span v-if="isAdd">Add new log</span>
+                        <span v-else>Edit log</span>
                         <button type="button" class="btn !p-0 text-base" @click="close">X</button>
                     </div>
 
@@ -63,24 +64,38 @@ import _ from 'lodash';
 import { useForm } from '~/composables/useForm';
 
 export default {
-    name: 'LogsAdd',
+    name: 'LogsForm',
     emits: ['close', 'refresh'],
+    props: {
+        // add / edit
+        mode: {
+            type: String,
+            default: 'add'
+        },
+        log: {
+            type: Object,
+            default: () => { }
+        }
+    },
     setup(props, { emit }) {
         const { $toast } = useNuxtApp();
+        const isAdd = computed(() => {
+            return props.mode === 'add'
+        })
 
         const form = useForm({
-            title: '',
-            description: '',
-            amount: '',
-            category: '',
+            title: props.log?.title,
+            description: props.log?.description,
+            amount: props.log?.amount,
+            category: props.log?.category,
             errors: {},
         })
 
         async function submit() {
             if (!form.validate()) return;
 
-            const { data, error } = await useFetch('/api/logs', {
-                method: 'POST',
+            const { data, error } = await useFetch(`/api/logs${!isAdd.value ? '/' + props.log.id : ''}`, {
+                method: isAdd.value ? 'POST' : 'PUT',
                 body: form.data()
             })
 
@@ -91,11 +106,11 @@ export default {
 
             $toast.success(data.value.message);
             form.reset();
-            close()
             emit('refresh')
+            close(true)
         }
 
-        function close() {
+        function close(force = false) {
             const hasData = Boolean(
                 Object.keys(form.data()).filter((key) => {
                     if (!form[key]) {
@@ -105,7 +120,7 @@ export default {
                 }).length
             )
 
-            if (hasData && !confirm('Are you sure to close? All input data will be lost!!')) {
+            if ((hasData && !force) && !confirm('Are you sure to close? All input data will be lost!!')) {
                 return;
             }
 
@@ -116,7 +131,8 @@ export default {
         return {
             form,
             submit,
-            close
+            close,
+            isAdd
         }
     }
 }

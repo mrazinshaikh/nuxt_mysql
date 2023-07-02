@@ -20,13 +20,13 @@
                     <td scope="col" class="px-6 py-4">{{ log.description }}</td>
                     <td scope="col" class="px-6 py-4">{{ log.amount }}</td>
                     <td scope="col" class="px-6 py-4">{{ log.category }}</td>
-                    <td scope="col" class="px-6 py-4">{{ log.create_at }}</td>
+                    <td scope="col" class="px-6 py-4">{{ log.created_at }}</td>
                     <td scope="col" class="px-6 py-4">
                         <div class="flex justify-around gap-2">
-                            <button>
+                            <button class="cursor-pointer" @click.stop="$emit('editLog', log)">
                                 <Icon name="material-symbols:edit-square-outline" size="1.5rem" />
                             </button>
-                            <button class="cursor-pointer" @click="$emit('deleteLog', log)">
+                            <button class="cursor-pointer" @click.stop="$emit('deleteLog', log)">
                                 <Icon name="ic:baseline-delete" size="1.5rem" />
                             </button>
                         </div>
@@ -46,6 +46,6 @@ export default {
             default: {}
         }
     },
-    emits: ['deleteLog']
+    emits: ['deleteLog', 'editLog']
 }
 </script>
