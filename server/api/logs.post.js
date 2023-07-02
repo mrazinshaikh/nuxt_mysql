@@ -1,7 +1,6 @@
-import { PrismaClient } from "@prisma/client"
+import prisma from '~/server/utils/prisma.js'
 
 export default defineEventHandler(async (event) => {
-    const client = new PrismaClient();
     const body = await readBody(event)
 
     const response = {
@@ -11,7 +10,7 @@ export default defineEventHandler(async (event) => {
     }
 
     try {
-        const log = await client.logs.create({
+        const log = await prisma.logs.create({
             data: body
         })
 
