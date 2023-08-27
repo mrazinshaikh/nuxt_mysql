@@ -3,10 +3,6 @@ import { reactive, watch } from 'vue';
 
 interface FormValues {
     [key: string]: any; // TODO: Questionable decision here to fix warning of this[key]
-    title: string;
-    description: string;
-    amount: string;
-    category: string;
     errors: { [key: string]: string };
     isValidated: boolean;
     data(): { [key: string]: string };
@@ -18,6 +14,7 @@ interface FormValues {
 export const useForm = (initialValues: FormValues): UnwrapNestedRefs<FormValues> => {
     const form = reactive<FormValues>({
         ...initialValues,
+        errors: {},
         isValidated: false,
         data() {
             const data: { [key: string]: string } = {};
@@ -37,12 +34,18 @@ export const useForm = (initialValues: FormValues): UnwrapNestedRefs<FormValues>
         },
         validate() {
             const check = !Boolean(
-                Object.keys(this).filter((key) => {
+                Object.keys(this.data()).filter((key) => {
                     if (typeof this[key] !== 'function' && key && !this[key]) {
                         this.errors[key] = 'Field is required';
                         return true;
                     }
-                    delete this.errors[key];
+                    try{
+                        if(this.errors[key]){
+                            delete this.errors[key];
+                        }
+                    }catch(e){
+                        console.error(e)
+                    }
                     return false;
                 }).length
             );

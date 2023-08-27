@@ -1,7 +1,8 @@
 <template>
   <div>
-    <header class="border-b border-gray-900 w-full p-4 text-center">
-      <h1 class="text-xl">Expense management</h1>
+    <header class="border-b border-gray-900 w-full p-4 text-center grid grid-cols-2 items-center">
+      <h1 class="text-xl text-right">Expense management</h1>
+      <button class="text-right text-blue-600 underline" title="Logout" @click.prevent="$user.logout()">Logout</button>
     </header>
 
     <main class="px-4 mt-4">
@@ -27,13 +28,15 @@
 import LogsList from '~/components/Logs/List.vue';
 import LogsForm from '~/components/Logs/Form.vue';
 
-
 export default {
   name: "Home",
   components: {
     LogsList, LogsForm,
   },
   async setup() {
+    definePageMeta({
+      middleware: ['auth']
+    })
     const { $toast } = useNuxtApp();
     const logs = ref();
     const showAddModal = ref(false);

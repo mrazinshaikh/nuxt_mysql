@@ -13,6 +13,8 @@ export default defineNuxtConfig({
     '@nuxt/devtools',
     '@nuxtjs/tailwindcss',
     'nuxt-icon', // list all icons https://icones.js.org/collection/all
+    '@pinia/nuxt',
+    '@pinia-plugin-persistedstate/nuxt',
   ],
 
   devtools: {

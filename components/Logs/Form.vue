@@ -88,7 +88,6 @@ export default {
             description: props.log?.description,
             amount: props.log?.amount,
             category: props.log?.category,
-            errors: {},
         })
 
         async function submit() {
