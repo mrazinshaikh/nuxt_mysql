@@ -64,15 +64,11 @@ import { useAuthStore } from '~/store/auth'
 export default defineComponent({
     name: 'AuthLogin',
     setup(props) {
-        definePageMeta({
-            middleware: ['guest']
-        })
-
         const authStore = useAuthStore();
         const disabled = ref(true); 
         const form = useForm({
-            email: 'razinshaikh8732@gmail.com',
-            password: 'Razin9963'
+            email: '',
+            password: ''
         })
 
         onMounted(() => {

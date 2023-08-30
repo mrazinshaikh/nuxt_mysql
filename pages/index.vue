@@ -2,7 +2,7 @@
   <div>
     <header class="border-b border-gray-900 w-full p-4 text-center grid grid-cols-2 items-center">
       <h1 class="text-xl text-right">Expense management</h1>
-      <button class="text-right text-blue-600 underline" title="Logout" @click.prevent="$user.logout()">Logout</button>
+      <nuxt-link to="/auth/logout" class="text-right text-blue-600 underline" title="Logout">Logout</nuxt-link>
     </header>
 
     <main class="px-4 mt-4">
@@ -34,9 +34,6 @@ export default {
     LogsList, LogsForm,
   },
   async setup() {
-    definePageMeta({
-      middleware: ['auth']
-    })
     const { $toast } = useNuxtApp();
     const logs = ref();
     const showAddModal = ref(false);

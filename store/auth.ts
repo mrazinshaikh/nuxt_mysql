@@ -21,6 +21,8 @@ export const useAuthStore = defineStore('auth', {
       if (data.value && data.value.success) {
         this.authenticated = true; // set authenticated  state value to true
         this.user = data.value.user;
+        const tokenCookie = useCookie('token');
+        tokenCookie.value = data.value.token
 
         return navigateTo('/');
       }
@@ -29,12 +31,13 @@ export const useAuthStore = defineStore('auth', {
     logUserOut() {
       this.authenticated = false;
       this.user = {};
+      useCookie('token').value = null
       return navigateTo('/auth/login')
     },
   },
   persist: {
     storage: persistedState.cookiesWithOptions({
-      maxAge: 60 * 60 * 24, // 24 hours
+      maxAge: 60 * 60 * 12, // 12 hours
       sameSite: 'strict',
     })
   }

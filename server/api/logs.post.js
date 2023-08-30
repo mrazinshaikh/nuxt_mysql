@@ -10,8 +10,12 @@ export default defineEventHandler(async (event) => {
     }
 
     try {
+        const user = event.context.auth;
         const log = await prisma.logs.create({
-            data: body
+            data: {
+                ...body,
+                user_id: user.id
+            }
         })
 
         response.success = true;

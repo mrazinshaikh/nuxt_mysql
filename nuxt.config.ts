@@ -20,4 +20,8 @@ export default defineNuxtConfig({
   devtools: {
     enabled: true,
   },
+
+  runtimeConfig: {
+    JWT_PRIVATE_KEY: process.env.JWT_PRIVATE_KEY,
+  }
 });

@@ -9,7 +9,10 @@
 
       <div class="border-t pt-4">
         <h2 class="text-xl font-semibold mb-2">Error Details:</h2>
-        <div class="stack" v-html="error.stack"></div>
+        <div v-if="error.stack" class="stack" v-html="error.stack"></div>
+        <div v-else-if="error.statusCode == 404" class="stack">
+          Coming Soon....... 🤞 
+        </div>
       </div>
     </div>
   </div>
