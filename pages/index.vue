@@ -1,8 +1,8 @@
 <template>
   <div>
-    <header class="border-b border-gray-900 w-full p-4 text-center grid grid-cols-2 items-center">
-      <h1 class="text-xl text-right">Expense management</h1>
-      <nuxt-link to="/auth/logout" class="text-right text-blue-600 underline" title="Logout">Logout</nuxt-link>
+    <header class="border-b border-gray-900 w-full p-4 text-center grid grid-cols-3 items-center">
+      <h1 class="text-xl text-center col-start-2">Expense management</h1>
+      <nuxt-link to="/auth/logout" class="flex items-center justify-end text-blue-600" title="Logout">Logout <Icon class="ml-2" name="quill:off"/></nuxt-link>
     </header>
 
     <main class="px-4 mt-4">
@@ -55,12 +55,12 @@ export default {
           method: 'DELETE',
         })
         if (error.value) {
-          $toast.error(error.value.data.message, { duration: 5000 })
+          $toast.show({ type:'danger', message: error.value.data.message, timeout: 5});
           return;
         }
 
         getAllLogs();
-        $toast.success(data.value.message);
+        $toast.show({ type:'success', message: data.value.message, timeout: 5});
       }
     }
 

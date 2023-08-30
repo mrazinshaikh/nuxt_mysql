@@ -87,7 +87,7 @@ export default {
             title: props.log?.title,
             description: props.log?.description,
             amount: props.log?.amount,
-            category: props.log?.category,
+            category: props.log?.category ?? '',
         })
 
         async function submit() {
@@ -99,11 +99,11 @@ export default {
             })
 
             if (error.value) {
-                $toast.error(error.value.data.message, { duration: 5000 })
+                $toast.show({ type:'danger', message: error.value.data.message, timeout: 5});
                 return;
             }
 
-            $toast.success(data.value.message);
+            $toast.show({ type:'success', message: data.value.message, timeout: 5});
             form.reset();
             emit('refresh')
             close(true)
