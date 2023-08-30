@@ -6,8 +6,8 @@
         "build": "nuxt build",
         "dev": "nuxt dev",
         "generate": "nuxt generate",
-        "start": "node .output/server/index.mjs",
-        "start2": "./server.sh",
+        "start2": "node .output/server/index.mjs",
+        "start": "./server.sh",
         "preview": "nuxt preview",
         "postinstall": "nuxt prepare && npx prisma generate"
     },
