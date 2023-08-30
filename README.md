@@ -1,3 +1,20 @@
+# Expanse management system
+
+### Nuxt project with direct integration of the orm to handle mysql db operations. Deployed nuxt project on vercel and planetscale for mysql database hosting.
+
+### Project screen shots 
+![Alt text](public/images/login.png)
+![Alt text](public/images/home.png)
+
+
+
+
+### Bug/Improvements
+
+- [] Prevent visiting login page if logged in.
+
+
+
 # Nuxt 3 Minimal Starter
 
 Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
