@@ -1,10 +1,4 @@
 <template>
-  <div>
-    <header class="border-b border-gray-900 w-full p-4 text-center grid grid-cols-3 items-center">
-      <h1 class="text-xl text-center col-start-2">Expense management</h1>
-      <nuxt-link to="/auth/logout" class="flex items-center justify-end text-blue-600" title="Logout">{{ $user.loggedUser().name }}<Icon class="ml-2" name="quill:off"/></nuxt-link>
-    </header>
-
     <main class="px-4 mt-4">
       <div class="text-right my-4">
         <button class="btn btn-primary" @click.stop="showAddModal = true">Add new</button>
@@ -20,8 +14,6 @@
         @refresh="getAllLogs"
       />
     </main>
-
-  </div>
 </template>
 
 <script>
@@ -34,6 +26,9 @@ export default {
     LogsList, LogsForm,
   },
   async setup() {
+    definePageMeta({
+      middleware: ['auth']
+    })
     const { $toast } = useNuxtApp();
     const logs = ref();
     const showAddModal = ref(false);
