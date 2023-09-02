@@ -1,27 +1,28 @@
 <template>
-  <div>
-    <header class="border-b border-gray-900 w-full p-4 text-center grid grid-cols-3 items-center">
-      <h1 class="text-xl text-center col-start-2">Expense management</h1>
-      <nuxt-link to="/auth/logout" class="flex items-center justify-end text-blue-600" title="Logout">{{ $user.loggedUser().name }}<Icon class="ml-2" name="quill:off"/></nuxt-link>
-    </header>
+  <main class="px-4 mt-4">
+    <div class="my-4">
+      <!-- <button class="btn btn-primary" @click.stop="showAddModal = true">Add new</button> -->
+      <h1 class="text-xl">Expense logs:</h1>
 
-    <main class="px-4 mt-4">
-      <div class="text-right my-4">
-        <button class="btn btn-primary" @click.stop="showAddModal = true">Add new</button>
-        <LogsForm v-show="showAddModal" @close="showAddModal = false" @refresh="getAllLogs" />
+      <div v-if="showLoadButton">
+        <button class="btn btn-primary mt-4" @click="loadData">
+          Load logs data
+        </button>
+        <label class="block mt-2 text-sm text-gray-500" for="">*This is to avoid hitting (hobby plans) limitations over deployment of db</label>
       </div>
+      <LogsForm v-show="showAddModal" @close="showAddModal = false" @refresh="getAllLogs" />
+    </div>
 
-      <LogsList :logs="logs" @deleteLog="deleteLog" @editLog="(log) => editLog = log" />
-      <LogsForm
-        v-if="Object.keys(editLog).length" 
-        mode="edit" 
-        :log="editLog" 
-        @close="editLog = false"
-        @refresh="getAllLogs"
-      />
-    </main>
-
-  </div>
+    <LogsList
+        v-if="logs.length > 0"
+        :logs="logs"
+        :totalPage="totalPage"
+        @deleteLog="deleteLog"
+        @editLog="(log) => editLog = log"
+    />
+    <LogsForm v-if="Object.keys(editLog).length" mode="edit" :log="editLog" @close="editLog = false"
+      @refresh="getAllLogs" />
+  </main>
 </template>
 
 <script>
@@ -34,19 +35,46 @@ export default {
     LogsList, LogsForm,
   },
   async setup() {
-    const { $toast } = useNuxtApp();
-    const logs = ref();
+    definePageMeta({
+      middleware: ['auth']
+    })
+    const { $toast, $bus } = useNuxtApp();
+    const $route = useRoute();
+    const logs = ref({});
+    const showLoadButton = ref(true);
+    const totalPage = ref();
     const showAddModal = ref(false);
     const editLog = ref({});
 
-    await getAllLogs();
+    watch(() => $route.query, async (value) => {
+      if(value.page > 0){
+        await getAllLogs();
+      }
+    })
+
+    onMounted(() => {
+      $bus.on('addLog:toggleModal', (value = !showAddModal.value) => {
+        showAddModal.value = value;
+      })
+      // nextTick(async () => {
+      //   await getAllLogs();
+      // })
+    })
+
+
+    async function loadData(){
+      showLoadButton.value = false
+      await getAllLogs();
+    }
 
     async function getAllLogs() {
-      logs.value = (
-        await useFetch("/api/logs", {
-          method: "GET",
-        })
-      ).data;
+      const { data } = await useFetch("/api/logs", {
+        method: "GET",
+        query: $route.query
+      })
+
+      logs.value = data.value.logs
+      totalPage.value = data.value.totalPage
     }
 
     async function deleteLog(log) {
@@ -55,17 +83,20 @@ export default {
           method: 'DELETE',
         })
         if (error.value) {
-          $toast.show({ type:'danger', message: error.value.data.message, timeout: 5});
+          $toast.show({ type: 'danger', message: error.value.data.message, timeout: 5 });
           return;
         }
 
         getAllLogs();
-        $toast.show({ type:'success', message: data.value.message, timeout: 5});
+        $toast.show({ type: 'success', message: data.value.message, timeout: 5 });
       }
     }
 
     return {
       logs,
+      totalPage,
+      loadData,
+      showLoadButton,
       getAllLogs,
       showAddModal,
       deleteLog,

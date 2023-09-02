@@ -16,6 +16,10 @@ body {
     @apply bg-blue-600 text-white;
 }
 
+.btn-primary-hover {
+    @apply bg-blue-600 hover:bg-blue-700 text-white;
+}
+
 .btn-secondary {
     @apply bg-gray-600 text-white;
 }
