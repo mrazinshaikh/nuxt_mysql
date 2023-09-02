@@ -24,11 +24,13 @@
         "typescript": "^5.0.4"
     },
     "dependencies": {
+        "@nuxtjs/device": "^3.1.0",
         "@pinia-plugin-persistedstate/nuxt": "^1.1.1",
         "@pinia/nuxt": "^0.4.11",
         "@prisma/client": "^5.2.0",
         "jsonwebtoken": "^9.0.1",
         "lodash": "^4.17.21",
+        "mitt": "^3.0.1",
         "pinia": "^2.1.4"
     }
 }

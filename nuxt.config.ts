@@ -16,6 +16,7 @@ export default defineNuxtConfig({
     "@pinia/nuxt",
     "@pinia-plugin-persistedstate/nuxt",
     "@tailvue/nuxt",
+    '@nuxtjs/device',
   ],
 
   devtools: {

@@ -6,6 +6,9 @@
 export default {
   name: "Logout",
   setup() {
+    definePageMeta({
+      layout: 'guest'
+    })
     onMounted(() => {
       setTimeout(() => {
         useNuxtApp().$user.logout();

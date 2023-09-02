@@ -65,6 +65,7 @@ export default defineComponent({
     name: 'AuthLogin',
     setup(props) {
         definePageMeta({
+            layout: 'guest',
             middleware: ['guest']
         })
         const authStore = useAuthStore();

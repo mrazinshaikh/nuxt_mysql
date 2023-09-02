@@ -1,7 +1,7 @@
 <template>
     <Transition>
         <div class="fixed inset-0 bg-black/30 ">
-            <div class="rounded absolute left-1/2 top-1/2 sm:top-1/3 -translate-x-1/2 -translate-y-1/2 bg-white w-11/12 sm:w-3/5"
+            <div class="rounded absolute left-1/2 top-[40%] sm:top-1/3 -translate-x-1/2 -translate-y-1/2 bg-white w-11/12 sm:w-3/5"
                 v-click-outside="close">
                 <form @submit.prevent="submit">
                     <!-- Header -->
