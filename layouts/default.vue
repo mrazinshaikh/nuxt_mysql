@@ -1,5 +1,5 @@
 <template>
-    <div class="relative pb-36 sm:pb-28">
+    <div class="relative pb-36 sm:pb-28 min-h-screen">
         <header class="border-b border-gray-900 w-full p-4 grid grid-cols-2 items-center">
             <div class="flex items-center gap-6">
                 <h1 class="!text-sm font-light">Expense management System</h1>

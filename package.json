@@ -6,7 +6,7 @@
         "build": "nuxt build",
         "dev": "nuxt dev",
         "generate": "nuxt generate",
-        "start2": "node .output/server/index.mjs",
+        "start2": "export NITRO_HOST=127.0.0.1 && node .output/server/index.mjs",
         "start": "./server.sh",
         "preview": "nuxt preview",
         "postinstall": "nuxt prepare && npx prisma generate"

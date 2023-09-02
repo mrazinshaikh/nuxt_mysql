@@ -3,10 +3,18 @@
     <div class="my-4">
       <!-- <button class="btn btn-primary" @click.stop="showAddModal = true">Add new</button> -->
       <h1 class="text-xl">Expense logs:</h1>
+
+      <div v-if="showLoadButton">
+        <button class="btn btn-primary mt-4" @click="loadData">
+          Load logs data
+        </button>
+        <label class="block mt-2 text-sm text-gray-500" for="">*This is to avoid hitting (hobby plans) limitations over deployment of db</label>
+      </div>
       <LogsForm v-show="showAddModal" @close="showAddModal = false" @refresh="getAllLogs" />
     </div>
 
     <LogsList
+        v-if="logs.length > 0"
         :logs="logs"
         :totalPage="totalPage"
         @deleteLog="deleteLog"
@@ -32,7 +40,8 @@ export default {
     })
     const { $toast, $bus } = useNuxtApp();
     const $route = useRoute();
-    const logs = ref();
+    const logs = ref({});
+    const showLoadButton = ref(true);
     const totalPage = ref();
     const showAddModal = ref(false);
     const editLog = ref({});
@@ -47,9 +56,16 @@ export default {
       $bus.on('addLog:toggleModal', (value = !showAddModal.value) => {
         showAddModal.value = value;
       })
+      // nextTick(async () => {
+      //   await getAllLogs();
+      // })
     })
 
-    await getAllLogs();
+
+    async function loadData(){
+      showLoadButton.value = false
+      await getAllLogs();
+    }
 
     async function getAllLogs() {
       const { data } = await useFetch("/api/logs", {
@@ -79,6 +95,8 @@ export default {
     return {
       logs,
       totalPage,
+      loadData,
+      showLoadButton,
       getAllLogs,
       showAddModal,
       deleteLog,

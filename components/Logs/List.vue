@@ -84,6 +84,7 @@
 
         <div class="flex gap-8 justify-end mt-6">
             <button
+                v-show="totalPage > 1"
                 class="btn btn-primary-hover"
                 :class="{'opacity-50 cursor-not-allowed': $route.query.page <= 1}"
                 :disabled="$route.query.page <= 1"
@@ -91,6 +92,7 @@
                 @click="prev"
             >Previous</button>
             <button
+                v-show="totalPage > 1"
                 class="btn btn-primary-hover"
                 :class="{'opacity-50 cursor-not-allowed': $route.query.page >= totalPage}"
                 :disabled="$route.query.page >= totalPage"
