@@ -8,7 +8,7 @@
 
         <NuxtPage></NuxtPage>
 
-        <footer class="w-full flex flex-col md:flex-row justify-between border-t border-black/50 text-base font-medium mt-10 px-5 md:px-10 py-6 gap-4">
+        <footer class="w-full flex flex-col md:flex-row absolute bottom-0 justify-between border-t border-black/50 text-base font-medium mt-10 px-5 md:px-10 py-6 gap-4">
             <div>Made with <span class="text-red-500">❤️</span> by <NuxtLink class="underline" to="https://github.com/mrazinshaikh" target="_blank" external>Razin Shaikh</NuxtLink>.</div>
             <NuxtLink
                 to="https://github.com/mrazinshaikh/nuxt_mysql"
