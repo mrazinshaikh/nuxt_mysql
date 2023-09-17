@@ -1,7 +1,7 @@
-import { defineStore } from 'pinia';
-import { useFetch } from '#app';
+import { defineStore } from "pinia";
+import { useFetch } from "#app";
 
-export const useAuthStore = defineStore('auth', {
+export const useAuthStore = defineStore("auth", {
   state: () => ({
     authenticated: false,
     loading: false,
@@ -9,36 +9,38 @@ export const useAuthStore = defineStore('auth', {
   }),
   actions: {
     async authenticateUser(username: string, password: string) {
-      const { data, pending }: any = await useFetch('/api/auth/login', {
-        method: 'post',
-        body: {
-          email: username,
-          password,
-        },
+      return new Promise(async(resolve, reject) => {
+        const { data, pending, error }: any = await useFetch("/api/auth/login", {
+          method: "post",
+          body: {
+            email: username,
+            password,
+          },
+        });
+        this.loading = pending.value;
+
+        if (data.value && data.value.success) {
+          this.authenticated = true; // set authenticated  state value to true
+          this.user = data.value.user;
+          const tokenCookie = useCookie("token");
+          tokenCookie.value = data.value.token;
+          resolve(1);
+          return navigateTo("/");
+        }
+        resolve(error);
       });
-      this.loading = pending.value;
-
-      if (data.value && data.value.success) {
-        this.authenticated = true; // set authenticated  state value to true
-        this.user = data.value.user;
-        const tokenCookie = useCookie('token');
-        tokenCookie.value = data.value.token
-
-        return navigateTo('/');
-      }
-
     },
     logUserOut() {
       this.authenticated = false;
       this.user = {};
-      useCookie('token').value = null
-      return navigateTo('/auth/login')
+      useCookie("token").value = null;
+      return navigateTo("/auth/login");
     },
   },
   persist: {
     storage: persistedState.cookiesWithOptions({
       maxAge: 60 * 60 * 12, // 12 hours
-      sameSite: 'strict',
-    })
-  }
+      sameSite: "strict",
+    }),
+  },
 });

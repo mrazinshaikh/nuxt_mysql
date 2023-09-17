@@ -2,19 +2,22 @@
   <main class="px-4 mt-4">
     <div class="my-4">
       <!-- <button class="btn btn-primary" @click.stop="showAddModal = true">Add new</button> -->
-      <h1 class="text-xl">Expense logs:</h1>
+      <div class="flex justify-between">
+        <h1 class="text-xl">Expense logs:</h1>
+        <button v-if="$device.isMobile" class="btn btn-primary" @click.stop="$bus.emit('addLog:toggleModal')">Add log</button>
+      </div>
 
       <div v-if="showLoadButton">
         <button class="btn btn-primary mt-4" @click="loadData">
           Load logs data
         </button>
-        <label class="block mt-2 text-sm text-gray-500" for="">*This is to avoid hitting (hobby plans) limitations over deployment of db</label>
+        <label class="block mt-2 text-sm text-gray-500" for="">*This (list logs action manually on button click) is to avoid hitting (hobby plans) limitations of db deployment over <a href="https://planetscale.com/" target="_blank" class="text-blue-500 underline">planetscale</a></label>
       </div>
       <LogsForm v-show="showAddModal" @close="showAddModal = false" @refresh="getAllLogs" />
     </div>
 
     <LogsList
-        v-if="logs.length > 0"
+        v-if="!showLoadButton"
         :logs="logs"
         :totalPage="totalPage"
         @deleteLog="deleteLog"

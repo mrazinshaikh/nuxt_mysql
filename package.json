@@ -20,14 +20,14 @@
         "nuxt": "^3.6.0",
         "nuxt-icon": "^0.5.0",
         "postcss": "^8.4.24",
-        "prisma": "^5.2.0",
+        "prisma": "^5.3.1",
         "typescript": "^5.0.4"
     },
     "dependencies": {
         "@nuxtjs/device": "^3.1.0",
         "@pinia-plugin-persistedstate/nuxt": "^1.1.1",
         "@pinia/nuxt": "^0.4.11",
-        "@prisma/client": "^5.2.0",
+        "@prisma/client": "^5.3.1",
         "jsonwebtoken": "^9.0.1",
         "lodash": "^4.17.21",
         "mitt": "^3.0.1",
