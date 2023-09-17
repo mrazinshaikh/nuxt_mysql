@@ -37,8 +37,11 @@
                         <button
                             type="submit"
                             class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-                            :class="{'animate-pulse opacity-50 cursor-wait': loading}"
-                            :disabled="loading"
+                            :class="[
+                                {'animate-pulse opacity-50 cursor-wait': loading},
+                                {'opacity-50 cursor-not-allowed': response?.statusCode === 400}
+                            ]"
+                            :disabled="loading || response?.statusCode === 400"
                             @click.prevent="onSubmit"
                         >Create an account</button>
                         <p class="text-sm font-light text-gray-500 ">
@@ -46,6 +49,35 @@
                         </p>
                     </form>
                 </div>
+            </div>
+            <div
+                v-if="response || response?.statusCode === 400"
+                class="w-full bg-gray-200 rounded-lg shadow sm:max-w-md mt-4 p-4 text-sm"
+            >
+                <p>Database might be in sleep mode, On Planetscale hobby plan, db automatically sleep if 7 days of inactivity. Please reach out to me if you want to test this out, i would be more than happy.</p>
+                
+                <p class="mt-2">
+                    <NuxtLink
+                        to="https://www.linkedin.com/in/mrazinshaikh/"
+                        class="flex gap-x-2 items-center"
+                        target="_blank"
+                        :external="true"
+                    >
+                        <Icon name="skill-icons:linkedin" color="black" />
+                        <span class="underline">mrazinshaikh</span>
+                    </NuxtLink>
+                </p>
+                <p class="mt-2">
+                    <NuxtLink
+                        to="https://mail.google.com/mail/?view=cm&fs=1&to=razinshaikh8732@gmail.com&su=Nuxt_MySql revive the database please&body=How are you doing...."
+                        class="flex gap-x-2 items-center"
+                        target="_blank"
+                        :external="true"
+                    >
+                        <Icon name="logos:google-gmail" color="black" />
+                        <span class="underline">razinshaikh8732@gmail.com</span>
+                    </NuxtLink>
+                </p>
             </div>
         </div>
     </section>
@@ -63,6 +95,7 @@ export default defineComponent({
         })
         const authStore = useAuthStore();
         const loading = ref(false);
+        const response = ref(false);
         const disabled = ref(true);
         const message = ref({
             terms: 'Check this dam box bruh!! 😏'
@@ -92,17 +125,24 @@ export default defineComponent({
             }
             if (valid) {
                 // to remove backend errors
-                const { data } = await useFetch('/api/auth/register', {
+                const { data, error } = await useFetch('/api/auth/register', {
                     method: 'post',
                     body: form.data()
-                })
+                });
+
+                if (error.value) {
+                    response.value = error.value;
+                    loading.value = false;
+                    return;
+                }
                 if (!data.value.success) {
                     form.errors = data.value.message;
                     loading.value = false;
                     return;
                 }
 
-                await authStore.authenticateUser(form.email, form.password)
+                const rsp = await authStore.authenticateUser(form.email, form.password)
+                response.value = rsp
                 loading.value = false;
                 form.reset();
             }
@@ -112,7 +152,8 @@ export default defineComponent({
             disabled,
             form,
             onSubmit,
-            loading
+            loading,
+            response
         }
     }
 })

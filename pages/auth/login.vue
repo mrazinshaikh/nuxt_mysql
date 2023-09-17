@@ -54,6 +54,35 @@
                     </form>
                 </div>
             </div>
+            <div
+                v-if="response || response?.statusCode === 400"
+                class="w-full bg-gray-200 rounded-lg shadow sm:max-w-md mt-4 p-4 text-sm"
+            >
+                <p>Database might be in sleep mode, On Planetscale hobby plan, db automatically sleep if 7 days of inactivity. Please reach out to me if you want to test this out, i would be more than happy.</p>
+                
+                <p class="mt-2">
+                    <NuxtLink
+                        to="https://www.linkedin.com/in/mrazinshaikh/"
+                        class="flex gap-x-2 items-center"
+                        target="_blank"
+                        :external="true"
+                    >
+                        <Icon name="skill-icons:linkedin" color="black" />
+                        <span class="underline">mrazinshaikh</span>
+                    </NuxtLink>
+                </p>
+                <p class="mt-2">
+                    <NuxtLink
+                        to="https://mail.google.com/mail/?view=cm&fs=1&to=razinshaikh8732@gmail.com&su=Nuxt_MySql revive the database please&body=How are you doing...."
+                        class="flex gap-x-2 items-center"
+                        target="_blank"
+                        :external="true"
+                    >
+                        <Icon name="logos:google-gmail" color="black" />
+                        <span class="underline">razinshaikh8732@gmail.com</span>
+                    </NuxtLink>
+                </p>
+            </div>
         </div>
     </section>
 </template>
@@ -74,21 +103,26 @@ export default defineComponent({
             email: '',
             password: ''
         })
+        const response = ref(false);
 
         onMounted(() => {
             disabled.value = false;
         })
 
-        function onSubmit() {
+        async function onSubmit() {
             const valid = form.validate();
             if (valid) {
-                authStore.authenticateUser(form.email, form.password)
+                const rsp = await authStore.authenticateUser(form.email, form.password)
+                console.log(rsp.value)
+                console.log(rsp.value.statusCode)
+                response.value = rsp.value
             }
         }
         return {
             disabled,
             form,
-            onSubmit
+            onSubmit,
+            response
         }
     }
 })

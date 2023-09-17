@@ -10,7 +10,7 @@ export const useAuthStore = defineStore("auth", {
   actions: {
     async authenticateUser(username: string, password: string) {
       return new Promise(async(resolve, reject) => {
-        const { data, pending }: any = await useFetch("/api/auth/login", {
+        const { data, pending, error }: any = await useFetch("/api/auth/login", {
           method: "post",
           body: {
             email: username,
@@ -27,7 +27,7 @@ export const useAuthStore = defineStore("auth", {
           resolve(1);
           return navigateTo("/");
         }
-        resolve(1);
+        resolve(error);
       });
     },
     logUserOut() {
