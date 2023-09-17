@@ -8,7 +8,7 @@
             <nuxt-link to="/auth/logout" class="flex items-center justify-end text-blue-600" title="Logout">{{ $user.loggedUser().name }}<Icon class="ml-2" name="quill:off"/></nuxt-link>
         </header>
 
-        <NuxtPage></NuxtPage>
+        <NuxtPage class="min-h-[78vh]"></NuxtPage>
 
         <Footer />
     </div>
