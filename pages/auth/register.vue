@@ -133,6 +133,14 @@ export default defineComponent({
                 if (error.value) {
                     response.value = error.value;
                     loading.value = false;
+                    if (response.value?.statusCode === 400) {
+                        setTimeout(() => {
+                            window.scrollTo({
+                                top: document.querySelector('section').clientHeight,
+                                behavior: 'smooth'
+                            })
+                        }, 500)
+                    }
                     return;
                 }
                 if (!data.value.success) {

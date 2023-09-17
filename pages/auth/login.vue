@@ -113,9 +113,15 @@ export default defineComponent({
             const valid = form.validate();
             if (valid) {
                 const rsp = await authStore.authenticateUser(form.email, form.password)
-                console.log(rsp.value)
-                console.log(rsp.value.statusCode)
                 response.value = rsp.value
+                if (response.value?.statusCode === 400) {
+                    setTimeout(() => {
+                        window.scrollTo({
+                            top: document.querySelector('section').clientHeight,
+                            behavior: 'smooth'
+                        })
+                    }, 500)
+                }
             }
         }
         return {
