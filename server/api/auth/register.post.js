@@ -1,5 +1,3 @@
-import _ from 'lodash'
-import jwt from 'jsonwebtoken'
 import crypto from 'node:crypto';
 import prisma from '~/server/utils/prisma.js'
 
@@ -30,8 +28,6 @@ export default defineEventHandler(async (event) => {
             return response;
         }
 
-        // const $config = useRuntimeConfig()
-        // const privateKey = $config.JWT_PRIVATE_KEY
         const md5 = crypto.createHash('md5').update(body.repassword).digest("hex");
         const name = body.email.split('@')[0];
 
@@ -45,10 +41,6 @@ export default defineEventHandler(async (event) => {
 
         response.success = true;
         response.data = log;
-
-        // response.success = true;
-        // response.user = _.omit(user, ['password', 'updated_at']);
-        // response.token = jwt.sign(response.user, privateKey, { expiresIn: '12h' });
     } catch (e) {
         response.message = 'something went wrong!!: ' + e.message;
 
