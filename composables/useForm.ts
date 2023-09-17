@@ -11,10 +11,15 @@ interface FormValues {
     isTypeFormData(key: string): boolean;
 }
 
-export const useForm = (initialValues: FormValues): UnwrapNestedRefs<FormValues> => {
+interface Error {
+    [key: string]: string,
+}
+
+export const useForm = (initialValues: FormValues, messages: Error): UnwrapNestedRefs<FormValues> => {
     const form = reactive<FormValues>({
         ...initialValues,
         errors: {},
+        messages: messages || {},
         isValidated: false,
         data() {
             const data: { [key: string]: string } = {};
@@ -36,7 +41,7 @@ export const useForm = (initialValues: FormValues): UnwrapNestedRefs<FormValues>
             const check = !Boolean(
                 Object.keys(this.data()).filter((key) => {
                     if (typeof this[key] !== 'function' && key && !this[key]) {
-                        this.errors[key] = 'Field is required';
+                        this.errors[key] = this.messages[key] ?? 'Field is required';
                         return true;
                     }
                     try{
@@ -55,7 +60,7 @@ export const useForm = (initialValues: FormValues): UnwrapNestedRefs<FormValues>
         isTypeFormData(key) {
             if (
                 typeof this[key] === 'function' ||
-                ['rules', 'errors', 'isValidated'].includes(key)
+                ['rules', 'errors', 'isValidated', 'messages'].includes(key)
             ) {
                 return false;
             }
