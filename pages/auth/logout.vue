@@ -10,9 +10,9 @@ export default {
       layout: 'guest'
     })
     onMounted(() => {
-      setTimeout(() => {
+      // setTimeout(() => {
         useNuxtApp().$user.logout();
-      }, 2000);
+      // }, 2000);
     });
   },
 };
